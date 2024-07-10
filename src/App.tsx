@@ -1,11 +1,11 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useRef, useState, useEffect } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Text, OrbitControls } from "@react-three/drei";
 import { Cylinder, Box } from "@react-three/drei";
 import * as THREE from "three"; 
 import styles from './app.module.css'; 
 
-const colorList = {
+const colorList:any = {
   CaO: "#2ECC71",
   H2O: "#2ECC71",
   "Ca(OH)2": "#2ECC71",
@@ -30,13 +30,13 @@ const colorList = {
   "4K": "#E74C3C",
   "2K2O": "#E74C3C",
 };
-const ChemicalRing = ({ position, elements, setRotation, index, rotation }) => {
-  const ref = useRef();
+const ChemicalRing = ({ position, elements, setRotation, index, rotation }:any) => {
+  const ref:any = useRef();
   const [hovered, setHovered] = useState(false);
 
   useFrame((the) => {
     ref.current.rotation.x = rotation;
-    ref.current.children.forEach((e, i) => {
+    ref.current.children.forEach((e:any, i:Number) => {
       if (i == 0) {
         return;
       }
@@ -70,7 +70,7 @@ const ChemicalRing = ({ position, elements, setRotation, index, rotation }) => {
           }
         />
       </Cylinder>
-      {elements.map((element, i) => (
+      {elements.map((element:any, i:any) => (
         <group key={i} rotation-x={(i * Math.PI) / (elements.length / 2)}>
           <Text
             position={[0, 0.9, 0]}
@@ -94,9 +94,9 @@ const ChemicalRing = ({ position, elements, setRotation, index, rotation }) => {
   );
 };
 
-const EquationSign = ({ position, sign }) => {
-  const ref = useRef();
-  useFrame(({ gl, scene, camera }) => {
+const EquationSign = ({ position, sign }:any) => {
+  const ref:any = useRef();
+  useFrame(({camera}:any) => {
     ref.current.lookAt(camera.position);
   });
   return (
@@ -105,7 +105,7 @@ const EquationSign = ({ position, sign }) => {
     </Text>
   );
 };
-const Scene = ({ setEquationMessage }) => {
+const Scene = ({ setEquationMessage }:any) => {
   const [rotations, setRotations] = useState([0, 0, 0]);
   // useThree((ther) => {
   //   const Texloader = new THREE.CubeTextureLoader();
@@ -119,7 +119,7 @@ const Scene = ({ setEquationMessage }) => {
   //   ]);
   //   ther.scene.background = texture;
   // });
-  const setRotation = (index, angle) => {
+  const setRotation = (index:any, angle:any) => {
     const newRotations = [...rotations];
     newRotations[index] = angle;
     setRotations(newRotations);
@@ -136,7 +136,7 @@ const Scene = ({ setEquationMessage }) => {
   ];
  
   const checkEquation = () => {
-    const getSelectedElement = (rotation, elements) => {
+    const getSelectedElement = (rotation:any, elements:any) => {
       const index =
         (elements.length -
           Math.round(rotation / (Math.PI / (elements.length / 2)))) %
@@ -148,7 +148,7 @@ const Scene = ({ setEquationMessage }) => {
     const middleElement = getSelectedElement(rotations[1], elements[1]);
     const rightElement = getSelectedElement(rotations[2], elements[2]);
 
-    const equations = {
+    const equations:any = {
       "CaO+H2O=Ca(OH)2":
         "CaO + H2O → Ca(OH)2 (Calcium hydroxide formation)\nCalcium oxide reacts with water to form calcium hydroxide, also known as slaked lime.",
       "C+O2=CO2":
