@@ -2,9 +2,9 @@ import React, { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Text, OrbitControls } from "@react-three/drei";
 import { Cylinder, Box } from "@react-three/drei";
-import * as THREE from "three";
-// EB984E
-//
+import * as THREE from "three"; 
+import styles from './app.module.css'; 
+
 const colorList = {
   CaO: "#2ECC71",
   H2O: "#2ECC71",
@@ -228,7 +228,7 @@ const ChemistryPuzzleGame = () => {
           maxWidth: "300px",
         }}
       >
-        <span className="">Chemistry Equation Puzzle</span>
+        <span className={styles.heading}>Chemistry Equation Puzzle</span>
         <p>Click on the rings to rotate and form correct chemical equations!</p>
       </div>
       <div
