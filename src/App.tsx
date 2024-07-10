@@ -3,6 +3,8 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Text, OrbitControls } from "@react-three/drei";
 import { Cylinder, Box } from "@react-three/drei";
 import * as THREE from "three";
+// EB984E
+//
 const colorList = {
   Na: "#AED6F1",
   H: "#EB984E",
@@ -41,7 +43,7 @@ const ChemicalRing = ({ position, elements, setRotation, index, rotation }) => {
     setRotation(index, (rotation - Math.PI / 3 + 2 * Math.PI) % (2 * Math.PI));
   };
 
-  const selectedIndex = (6 - Math.round(rotation / (Math.PI / 3))) % 6;
+  const selectedIndex = (elements.length - Math.round(rotation / (Math.PI / (elements.length / 2)))) % elements.length;
 
   return (
     <group ref={ref} position={position}>
@@ -52,10 +54,16 @@ const ChemicalRing = ({ position, elements, setRotation, index, rotation }) => {
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
       >
-        <meshStandardMaterial color={hovered ? new THREE.Color("#40E0D0").lerp(new THREE.Color(0,0,0),0.5) : new THREE.Color("#40E0D0").lerp(new THREE.Color(0,0,0),0.3)} />
+        <meshStandardMaterial
+          color={
+            hovered
+              ? new THREE.Color("#40E0D0").lerp(new THREE.Color(0, 0, 0), 0.5)
+              : new THREE.Color("#40E0D0").lerp(new THREE.Color(0, 0, 0), 0.3)
+          }
+        />
       </Cylinder>
       {elements.map((element, i) => (
-        <group key={i} rotation-x={(i * Math.PI) / 3}>
+        <group key={i} rotation-x={(i * Math.PI) / (elements.length / 2)}>
           <Text
             position={[0, 0.9, 0]}
             rotation-y={-Math.PI / 2}
@@ -113,36 +121,23 @@ const Scene = ({ setEquationMessage }) => {
     checkEquation();
   }, [rotations]);
 
+  const elements = [
+    ["CaO", "Ca(OH)2", "C", "Fe", "N2", "2Na"],
+    ["H2O", "O2", "CO2", "S", "3H2", "Cl2"],
+    ["Ca(OH)2", "CO2", "CaCO3", "FeS", "2NH3", "2NaCl"],
+  ];
   const checkEquation = () => {
     const getSelectedElement = (rotation, elements) => {
-      const index = (6 - Math.round(rotation / (Math.PI / 3))) % 6;
+      const index =
+        (elements.length -
+          Math.round(rotation / (Math.PI / (elements.length / 2)))) %
+        elements.length;
       return elements[index];
     };
 
-    const leftElement = getSelectedElement(rotations[0], [
-      "Na",
-      "H",
-      "Cl",
-      "Zn",
-      "O",
-      "C",
-    ]);
-    const middleElement = getSelectedElement(rotations[1], [
-      "H2",
-      "O2",
-      "Cl2",
-      "N2",
-      "F2",
-      "Br2",
-    ]);
-    const rightElement = getSelectedElement(rotations[2], [
-      "H2O",
-      "NaCl",
-      "CO2",
-      "NH3",
-      "CH4",
-      "HCl",
-    ]);
+    const leftElement = getSelectedElement(rotations[0], elements[0]);
+    const middleElement = getSelectedElement(rotations[1], elements[1]);
+    const rightElement = getSelectedElement(rotations[2], elements[2]);
 
     const equations = {
       "Na+Cl2=NaCl":
@@ -161,11 +156,6 @@ const Scene = ({ setEquationMessage }) => {
     setEquationMessage(message);
   };
 
-  const elements = [
-    ["Na", "H", "Cl", "Zn", "O", "C"],
-    ["H2", "O2", "Cl2", "N2", "F2", "Br2"],
-    ["H2O", "NaCl", "CO2", "NH3", "CH4", "HCl"],
-  ];
   let dist = 0.4;
   return (
     <>
