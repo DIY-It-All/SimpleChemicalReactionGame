@@ -6,24 +6,29 @@ import * as THREE from "three";
 // EB984E
 //
 const colorList = {
-  Na: "#AED6F1",
-  H: "#EB984E",
-  Cl: "#AED6F1",
-  Zn: "#34eb30",
-  O: "#40E0D0",
-  C: "#40E0D0",
-  H2: "#34eb60",
-  O2: "#EB984E",
-  Cl2: "#34eb00",
-  N2: "#34eb90",
-  F2: "#344bb0",
-  Br2: "#34eba0",
-  H2O: "#EB984E",
-  NaCl: "#AED6F1",
-  CO2: "#111be0",
-  NH3: "#34eb4f",
-  CH4: "#34f000",
-  HCl: "#34efc4",
+  CaO: "#2ECC71",
+  H2O: "#2ECC71",
+  "Ca(OH)2": "#2ECC71",
+
+  C: "#ABB2B9",
+  O2: "#ABB2B9",
+  CO2: "#ABB2B9",
+
+  Fe: "#F5B041",
+  S: "#F5B041",
+  FeS: "#F5B041",
+
+  N2: "#8E44AD",
+  "3H2": "#8E44AD",
+  "2NH3": "#8E44AD",
+
+  "2Na": "#2471A3",
+  Cl2: "#2471A3",
+  "2NaCl": "#2471A3",
+
+  O: "#E74C3C",
+  "4K": "#E74C3C",
+  "2K2O": "#E74C3C",
 };
 const ChemicalRing = ({ position, elements, setRotation, index, rotation }) => {
   const ref = useRef();
@@ -43,7 +48,10 @@ const ChemicalRing = ({ position, elements, setRotation, index, rotation }) => {
     setRotation(index, (rotation - Math.PI / 3 + 2 * Math.PI) % (2 * Math.PI));
   };
 
-  const selectedIndex = (elements.length - Math.round(rotation / (Math.PI / (elements.length / 2)))) % elements.length;
+  const selectedIndex =
+    (elements.length -
+      Math.round(rotation / (Math.PI / (elements.length / 2)))) %
+    elements.length;
 
   return (
     <group ref={ref} position={position}>
@@ -122,10 +130,11 @@ const Scene = ({ setEquationMessage }) => {
   }, [rotations]);
 
   const elements = [
-    ["CaO", "Ca(OH)2", "C", "Fe", "N2", "2Na"],
-    ["H2O", "O2", "CO2", "S", "3H2", "Cl2"],
-    ["Ca(OH)2", "CO2", "CaCO3", "FeS", "2NH3", "2NaCl"],
+    ["CaO", "C", "Fe", "N2", "2Na","4K"],
+    ["H2O", "CO2", "S", "3H2", "Cl2","O"],
+    ["Ca(OH)2", "CaCO3", "FeS", "2NH3", "2NaCl","2K2O"],
   ];
+ 
   const checkEquation = () => {
     const getSelectedElement = (rotation, elements) => {
       const index =
@@ -140,14 +149,18 @@ const Scene = ({ setEquationMessage }) => {
     const rightElement = getSelectedElement(rotations[2], elements[2]);
 
     const equations = {
-      "Na+Cl2=NaCl":
-        "2Na + Cl2 → 2NaCl (Sodium chloride formation)\nSodium metal reacts vigorously with chlorine gas to form sodium chloride, common table salt.",
-      "H+O2=H2O":
-        "2H2 + O2 → 2H2O (Water formation)\nHydrogen gas combusts in oxygen to form water. This reaction releases a large amount of energy.",
+      "CaO+H2O=Ca(OH)2":
+        "CaO + H2O → Ca(OH)2 (Calcium hydroxide formation)\nCalcium oxide reacts with water to form calcium hydroxide, also known as slaked lime.",
       "C+O2=CO2":
         "C + O2 → CO2 (Carbon dioxide formation)\nCarbon burns in oxygen to form carbon dioxide. This is a common combustion reaction.",
-      "Zn+O2=ZnO":
-        "2Zn + O2 → 2ZnO (Zinc oxide formation)\nZinc metal reacts with oxygen in the air to form zinc oxide, a white powder used in many products.",
+      "Fe+S=FeS":
+        "Fe + S → FeS (Iron sulfide formation)\nIron reacts with sulfur to form iron sulfide, a compound commonly found in minerals like pyrite.",
+      "N2+3H2=2NH3":
+        "N2 + 3H2 → 2NH3 (Ammonia formation)\nNitrogen gas reacts with hydrogen gas under high pressure and temperature to form ammonia.",
+      "2Na+Cl2=2NaCl":
+        "2Na + Cl2 → 2NaCl (Sodium chloride formation)\nSodium metal reacts vigorously with chlorine gas to form sodium chloride, common table salt.",
+      "4K+O=2K2O":
+        "4K + O → 2K2O (Potassium oxide formation)\nPotassium metal reacts with oxygen gas to form potassium oxide, a basic compound used in glass production."
     };
 
     const equationKey = `${leftElement}+${middleElement}=${rightElement}`;
@@ -215,7 +228,7 @@ const ChemistryPuzzleGame = () => {
           maxWidth: "300px",
         }}
       >
-        <h1>Chemistry Equation Puzzle</h1>
+        <span className="">Chemistry Equation Puzzle</span>
         <p>Click on the rings to rotate and form correct chemical equations!</p>
       </div>
       <div
